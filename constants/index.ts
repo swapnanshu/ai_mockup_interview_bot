@@ -1,6 +1,8 @@
 // import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 // import { z } from "zod";
 
+import { CreateWorkflowDTO } from "@vapi-ai/web/dist/api";
+
 export const mappings = {
   "react.js": "react",
   reactjs: "react",
@@ -97,7 +99,7 @@ export const mappings = {
   "aws amplify": "amplify",
 };
 
-export const generator = {
+export const generator: CreateWorkflowDTO = {
   name: "interview_prep",
   nodes: [
     {
@@ -106,8 +108,8 @@ export const generator = {
       isStart: true,
       metadata: {
         position: {
-          x: 119.87992858886719,
-          y: 121.6232681274414,
+          x: 67.514892578125,
+          y: 88.4406509399414,
         },
       },
       prompt:
@@ -119,9 +121,8 @@ export const generator = {
         temperature: 0.7,
       },
       voice: {
-        model: "aura-2",
-        voiceId: "thalia",
-        provider: "deepgram",
+        voiceId: "Hana",
+        provider: "vapi",
       },
       variableExtractionPlan: {
         output: [
@@ -168,8 +169,8 @@ export const generator = {
       type: "tool",
       metadata: {
         position: {
-          x: 119.87992858886719,
-          y: 769.3151168823242,
+          x: 67.514892578125,
+          y: 400.7829895019531,
         },
       },
       tool: {
@@ -224,33 +225,12 @@ export const generator = {
       },
     },
     {
-      name: "conversation_1748790111430",
-      type: "conversation",
-      metadata: {
-        position: {
-          x: 119.87992858886719,
-          y: 1098.7424392700195,
-        },
-      },
-      prompt:
-        "Thank the user for the responses and say that the interview has been generated.",
-      model: {
-        model: "gpt-4o",
-        provider: "openai",
-        maxTokens: 1000,
-        temperature: 0.7,
-      },
-      messagePlan: {
-        firstMessage: "",
-      },
-    },
-    {
       name: "conversation_1748792976777",
       type: "conversation",
       metadata: {
         position: {
-          x: 119.87992858886719,
-          y: 469.8877944946289,
+          x: 67.514892578125,
+          y: 676.9981079101562,
         },
       },
       prompt:
@@ -270,8 +250,8 @@ export const generator = {
       type: "tool",
       metadata: {
         position: {
-          x: 119.87992858886719,
-          y: 1396.1817932128906,
+          x: 67.514892578125,
+          y: 949.4617347717285,
         },
       },
       tool: {
@@ -308,23 +288,15 @@ export const generator = {
       to: "conversation_1748792976777",
       condition: {
         type: "ai",
-        prompt: "",
+        prompt: "do not wait and simply proceed",
       },
     },
     {
       from: "conversation_1748792976777",
-      to: "conversation_1748790111430",
-      condition: {
-        type: "ai",
-        prompt: "",
-      },
-    },
-    {
-      from: "conversation_1748790111430",
       to: "hangup_1748793146138",
       condition: {
         type: "ai",
-        prompt: "if the user said yes",
+        prompt: "wait for 2 seconds and then proceed",
       },
     },
   ],
