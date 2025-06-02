@@ -13,8 +13,8 @@ const page = async () => {
   const user = await getCurrentUser();
 
   const [userInterviews, allInterview] = await Promise.all([
-    getInterviewsByUserId(user?.id),
-    getLatestInterviews({ userId: user?.id }),
+    getInterviewsByUserId(user?.id || ""),
+    getLatestInterviews({ userId: user?.id || "" }),
   ]);
 
   const hasPastInterviews = userInterviews?.length > 0;
@@ -23,9 +23,12 @@ const page = async () => {
   return (
     <>
       <section className="card-cta">
-        <div className="flex flex-col gap-6">
-          <h2>Get AI powered mockup interviews to get job ready.</h2>
-          <p>Practice on real interview questions and get instant feedback.</p>
+        <div className="flex flex-col gap-6 max-w-lg">
+          <h2>Get Interview-Ready with AI-Powered Practice & Feedback</h2>
+          <p className="text-lg">
+            Practice real interview questions & get instant feedback
+          </p>
+
           <Button asChild className="btn-primary max-sm:w-full">
             <Link href="/interview">Start the interview</Link>
           </Button>
@@ -33,7 +36,7 @@ const page = async () => {
         <Image
           className="max-sm:hidden"
           src="/robot.png"
-          alt="robot-stack"
+          alt="robo-dude"
           width={400}
           height={400}
         />
@@ -61,7 +64,7 @@ const page = async () => {
               <InterviewCard
                 key={interview.id}
                 userId={user?.id}
-                interviewId={interview.id}
+                id={interview.id}
                 role={interview.role}
                 type={interview.type}
                 techstack={interview.techstack}

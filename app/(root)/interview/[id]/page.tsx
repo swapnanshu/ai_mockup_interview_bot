@@ -1,7 +1,10 @@
 import Agent from "@/app/components/Agent";
 import { TechStackIcons } from "@/app/components/TechStackIcons";
 import { getCurrentUser } from "@/lib/actions/auth.actions";
-import { getInterviewsById } from "@/lib/actions/general.actions";
+import {
+  getFeedbackByInterviewId,
+  getInterviewById,
+} from "@/lib/actions/general.actions";
 import { getRandomInterviewCover } from "@/lib/utils";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -10,9 +13,15 @@ import React from "react";
 const page = async ({ params }: RouteParams) => {
   const { id } = await params;
   const user = await getCurrentUser();
-  const interview = await getInterviewsById(id);
+  const interview = await getInterviewById(id);
 
   if (!interview) redirect("/");
+
+  const feedback = await getFeedbackByInterviewId({
+    interviewId: id,
+    userId: user?.id || "",
+  });
+
   return (
     <>
       <div className="flex flex-row gap-4 justify-between">
@@ -42,6 +51,7 @@ const page = async ({ params }: RouteParams) => {
         interviewId={id}
         type="interview"
         questions={interview.questions}
+        feedbackId={feedback?.id}
       />
     </>
   );

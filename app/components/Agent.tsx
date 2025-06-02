@@ -6,6 +6,7 @@ import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { createFeedback } from "@/lib/actions/general.actions";
 
 enum CallStatus {
   ACTIVE = "ACTIVE",
@@ -24,6 +25,7 @@ const Agent = ({
   userId,
   type,
   interviewId,
+  feedbackId,
   questions,
 }: AgentProps) => {
   const router = useRouter();
@@ -126,16 +128,23 @@ const Agent = ({
 
     const handleGenerateFeedback = async (messages: SavedMessage[]) => {
       console.log("handleGenerateFeedback");
-      const { success, id } = {
-        success: true,
-        id: "feedback_id",
-      };
 
-      if (success && id) {
-        router.push(`/interview/${interviewId}/feedback`);
-      } else {
-        console.log("Error saving feedback");
-        router.push("/");
+      try {
+        const { success, feedbackId: id } = await createFeedback({
+          interviewId: interviewId!,
+          userId: userId!,
+          transcript: messages,
+          feedbackId,
+        });
+
+        if (success && id) {
+          router.push(`/interview/${interviewId}/feedback`);
+        } else {
+          console.log("Error saving feedback");
+          router.push("/");
+        }
+      } catch (e) {
+        console.error(e);
       }
     };
 
@@ -146,14 +155,20 @@ const Agent = ({
         handleGenerateFeedback(messages);
       }
     }
-  }, [messages, callStatus]);
+  }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
 
   return (
     <>
       <div className="call-view">
         <div className="card-interviewer">
           <div className="avatar">
-            <Image src="/ai-avatar.png" width={65} height={54} alt="vapi" />
+            <Image
+              src="/ai-avatar.png"
+              alt="vapi"
+              width={65}
+              height={54}
+              className="object-cover"
+            />
             {isSpeaking && <span className="animate-speak" />}
           </div>
           <h3>AI Interviewer</h3>
