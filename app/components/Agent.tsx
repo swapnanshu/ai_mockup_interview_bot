@@ -1,6 +1,6 @@
 "use client";
 
-import { generator } from "@/constants";
+import { generator, interviewer } from "@/constants";
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
@@ -19,7 +19,13 @@ interface SavedMessage {
   content: string;
 }
 
-const Agent = ({ userName, userId, type }: AgentProps) => {
+const Agent = ({
+  userName,
+  userId,
+  type,
+  interviewId,
+  questions,
+}: AgentProps) => {
   const router = useRouter();
 
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
@@ -44,6 +50,20 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
         undefined,
         generator
       );
+    } else {
+      let formattedQuestions = "";
+
+      if (questions?.length) {
+        formattedQuestions = questions
+          .map((question) => `- ${question}`)
+          .join("\n");
+      }
+
+      await vapi.start(interviewer, {
+        variableValues: {
+          questions: formattedQuestions,
+        },
+      });
     }
   };
 
@@ -61,7 +81,12 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
       setCallStatus(CallStatus.FINISHED);
     };
 
-    const onMessage = (message: Message) => {};
+    const onMessage = (message: Message) => {
+      if (message.type === "transcript" && message.transcriptType === "final") {
+        const newMessage = { role: message.role, content: message.transcript };
+        setMessages((prev) => [...prev, newMessage]);
+      }
+    };
 
     const onSpeechStart = () => {
       console.log("speech start");
@@ -99,8 +124,27 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
       setLastMessage(messages[messages.length - 1].content);
     }
 
+    const handleGenerateFeedback = async (messages: SavedMessage[]) => {
+      console.log("handleGenerateFeedback");
+      const { success, id } = {
+        success: true,
+        id: "feedback_id",
+      };
+
+      if (success && id) {
+        router.push(`/interview/${interviewId}/feedback`);
+      } else {
+        console.log("Error saving feedback");
+        router.push("/");
+      }
+    };
+
     if (callStatus === CallStatus.FINISHED) {
-      router.push("/");
+      if (type === "generate") {
+        router.push("/");
+      } else {
+        handleGenerateFeedback(messages);
+      }
     }
   }, [messages, callStatus]);
 
