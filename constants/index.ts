@@ -209,7 +209,7 @@ export const generator: CreateWorkflowDTO = {
             },
           },
         },
-        name: "Create Interview Questions",
+        name: "CreateInterviewQuestions",
         type: "apiRequest",
         method: "POST",
         function: {
@@ -286,7 +286,7 @@ export const generator: CreateWorkflowDTO = {
       to: "conversation_1748792976777",
       condition: {
         type: "ai",
-        prompt: "do not wait and simply proceed",
+        prompt: "proceed ahead",
       },
     },
     {
@@ -299,7 +299,7 @@ export const generator: CreateWorkflowDTO = {
     },
   ],
   globalPrompt:
-    "You are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
+    "You are a professional HR voice assistant helping with creating new AI interviews. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
 };
 
 export const interviewer: CreateAssistantDTO = {
