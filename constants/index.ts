@@ -119,8 +119,9 @@ export const generator: CreateWorkflowDTO = {
         temperature: 0.7,
       },
       voice: {
-        voiceId: "Hana",
-        provider: "vapi",
+        model: "aura-2",
+        voiceId: "thalia",
+        provider: "deepgram",
       },
       variableExtractionPlan: {
         output: [
@@ -167,8 +168,8 @@ export const generator: CreateWorkflowDTO = {
       type: "tool",
       metadata: {
         position: {
-          x: 67.514892578125,
-          y: 400.7829895019531,
+          x: 69.36296469414316,
+          y: 565.8750922637937,
         },
       },
       tool: {
@@ -227,8 +228,8 @@ export const generator: CreateWorkflowDTO = {
       type: "conversation",
       metadata: {
         position: {
-          x: 67.514892578125,
-          y: 676.9981079101562,
+          x: 70.9705629148574,
+          y: 948.2682293436496,
         },
       },
       prompt:
@@ -248,8 +249,8 @@ export const generator: CreateWorkflowDTO = {
       type: "tool",
       metadata: {
         position: {
-          x: 67.514892578125,
-          y: 949.4617347717285,
+          x: 673.985036674661,
+          y: 1022.0308118431088,
         },
       },
       tool: {
@@ -278,7 +279,8 @@ export const generator: CreateWorkflowDTO = {
       to: "API Request",
       condition: {
         type: "ai",
-        prompt: "if the user provided all the required variables",
+        prompt:
+          "Check if all the required fields have been provided by the user, if not then ask them to provide those specific fields. Only after receiving all the fields proceed for the next block",
       },
     },
     {
@@ -286,7 +288,8 @@ export const generator: CreateWorkflowDTO = {
       to: "conversation_1748792976777",
       condition: {
         type: "ai",
-        prompt: "proceed ahead",
+        prompt:
+          "Once the API call has been made in previous block then proceed ahead to the next block",
       },
     },
     {
@@ -299,7 +302,7 @@ export const generator: CreateWorkflowDTO = {
     },
   ],
   globalPrompt:
-    "You are a professional HR voice assistant helping with creating new AI interviews. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
+    "You are a youthful & professional HR voice assistant helping with creating new AI mock interviews. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
 };
 
 export const interviewer: CreateAssistantDTO = {
