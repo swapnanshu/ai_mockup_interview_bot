@@ -46,8 +46,6 @@ const Agent = ({
             username: userName,
             userid: userId,
           },
-          clientMessages: ["transcript"],
-          serverMessages: [],
         },
         undefined,
         generator

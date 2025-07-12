@@ -111,17 +111,17 @@ export const generator: CreateWorkflowDTO = {
         },
       },
       prompt:
-        "Greet the user by saying their name as {{username}} and help them create a new mock interview",
+        "Greet the user by saying their name as {{username}} and help them create a new mock interview. Ask the questions one by one and wait for their response. Repeat the question only when no response is received for 3 seconds ",
       model: {
         model: "gpt-4o",
         provider: "openai",
         maxTokens: 1000,
-        temperature: 0.7,
+        temperature: 0.5,
       },
       voice: {
-        model: "aura-2",
-        voiceId: "thalia",
-        provider: "deepgram",
+        model: "eleven_turbo_v2_5",
+        voiceId: "jBzLvP03992lMFEkj2kJ",
+        provider: "11labs",
       },
       variableExtractionPlan: {
         output: [
@@ -221,27 +221,33 @@ export const generator: CreateWorkflowDTO = {
             properties: {},
           },
         },
-      },
-    },
-    {
-      name: "conversation_1748792976777",
-      type: "conversation",
-      metadata: {
-        position: {
-          x: 70.9705629148574,
-          y: 948.2682293436496,
+        messages: [
+          {
+            type: "request-start",
+            blocking: false,
+          },
+          {
+            role: "assistant",
+            type: "request-complete",
+            content:
+              "The interview has been generated on your dashboard. You may take the interview from there. Thank you!",
+            endCallAfterSpokenEnabled: true,
+          },
+          {
+            type: "request-failed",
+            content:
+              "Oops! Looks like there is some error on server's end. Please try after some time. Sorry for the inconvenience.",
+            endCallAfterSpokenEnabled: true,
+          },
+        ],
+        variableExtractionPlan: {
+          schema: {
+            type: "object",
+            required: [],
+            properties: {},
+          },
+          aliases: [],
         },
-      },
-      prompt:
-        "Thank {{username}} for their response, and say that we will generate the interview shortly.",
-      model: {
-        model: "gpt-4o",
-        provider: "openai",
-        maxTokens: 1000,
-        temperature: 0.7,
-      },
-      messagePlan: {
-        firstMessage: "",
       },
     },
     {
@@ -249,8 +255,8 @@ export const generator: CreateWorkflowDTO = {
       type: "tool",
       metadata: {
         position: {
-          x: 673.985036674661,
-          y: 1022.0308118431088,
+          x: 70.05727350357293,
+          y: 803.5578260037713,
         },
       },
       tool: {
@@ -280,29 +286,25 @@ export const generator: CreateWorkflowDTO = {
       condition: {
         type: "ai",
         prompt:
-          "Check if all the required fields have been provided by the user, if not then ask them to provide those specific fields. Only after receiving all the fields proceed for the next block",
+          "Check if all the required fields have been provided by the user, if not then ask them to provide those specific fields. Proceed only after receiving all the fields.",
       },
     },
     {
       from: "API Request",
-      to: "conversation_1748792976777",
-      condition: {
-        type: "ai",
-        prompt:
-          "Once the API call has been made in previous block then proceed ahead to the next block",
-      },
-    },
-    {
-      from: "conversation_1748792976777",
       to: "hangup_1748793146138",
       condition: {
         type: "ai",
-        prompt: "wait for 2 seconds and then proceed",
+        prompt: "",
       },
     },
   ],
+  voice: {
+    model: "eleven_turbo_v2_5",
+    voiceId: "jBzLvP03992lMFEkj2kJ",
+    provider: "11labs",
+  },
   globalPrompt:
-    "You are a youthful & professional HR voice assistant helping with creating new AI mock interviews. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
+    "You are a professional HR voice assistant helping with creating new AI mock interviews. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
 };
 
 export const interviewer: CreateAssistantDTO = {
